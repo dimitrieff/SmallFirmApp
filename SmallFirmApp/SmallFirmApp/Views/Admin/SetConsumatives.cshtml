@@ -1,0 +1,75 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model IEnumerable<Consumative>
+
+
+<h4>Настройки на консумативи</h4>
+<div class="col-6">
+    <a class="mb-3 btn btn-primary" asp-action="CreateConsumative" asp-route-ctr="Admin" asp-route-act="SetConsumatives">Нов запис</a>
+    <a class=" mb-3 btn btn-danger" asp-action="ListAllConsumatives">Покажи всички</a>
+    <div>
+        @foreach (var entry in Model)
+        {
+            <div id="entry-@entry.Id">
+                <label class="col-1" asp-for="@entry.Id">@entry.Id</label>
+                <input id="id-@entry.Id" class="col-4" asp-for="@entry.Name" />
+                <input type="hidden" asp-for="@entry.Id" />
+                <input id="price-@entry.Id" class="col-1" asp-for="@entry.Price" />
+                <button class="btn btn-dark btn-sm" onclick="editEntry(@entry.Id)">Промени</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteEntry(@entry.Id)">Изтрий</button>
+            </div>
+            <br>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteEntry(id) {
+            if (confirm("Записът ще бъде изтрит")) {
+                $.ajax({
+                    url: "@Url.Action("DeleteConsumative", "Admin")/" + id,
+                    type: "post",
+                    success: function (result) {
+                        $("#entry-" + id).remove();
+
+                    },
+                    error: function (err) {
+                        alert("error")
+                    }
+                });
+            }
+        }
+        // function editEntry() {
+        //     id = document.getElementById('idValue').value;
+        //     nam = document.getElementById('nameValue').value;
+        //     $.ajax({
+        //         url: "@Url.Action("EditAddon", "Admin")/" + id + nam,
+        //         type: "post"
+        //     });
+        // }
+        function editEntry(id) {
+            // Declare variables properly
+            // let id = document.getElementById('id-' + entry.Id).value;
+            let nam = document.getElementById("id-" + id).value;
+            let price = document.getElementById("price-" + id).value;
+            // Make sure to construct the URL properly
+            let url = "@Url.Action("EditConsumative", "Admin")"; // Razor will generate the base URL
+            url += `?id=${encodeURIComponent(id)}&name=${encodeURIComponent(nam)}&price=${encodeURIComponent(price)}`;
+
+            // Perform the AJAX request
+            $.ajax({
+                url: url,
+                type: "post",
+                success: function (response) {
+                    // Handle success
+                    location.reload();
+                    console.log("Edit successful:", response);
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error("Edit failed:", status, error);
+                }
+            });
+        }
+    </script>
+}

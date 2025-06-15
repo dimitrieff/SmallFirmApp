@@ -1,0 +1,37 @@
+﻿@using SmallFirmApp.Models.ViewModels
+@model InvoiceVM
+
+<h4>Данни за фактура:</h4>
+<form asp-action="Invoice">
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">Клиент:</label>
+        <input class="col-4 mb-3" asp-for="@Model.Client.Name" />
+    </div>
+    <div>
+        <label class="mb-3 col-1 text-dark">Дата:</label>
+        <input type="date" class="mb-3" asp-for="@Model.InvoiceDate" />
+    @* <span asp-validation-for="ExtraPrice" class="text-danger"></span> *@
+     </div>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">ЕИК:</label>
+        <input class="col-4 mb-3" asp-for="@Model.Client.Ein" value="@Model.Client.Ein"/>
+    </div>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">Стойност:</label>
+        <input class="col-4 mb-3" asp-for="@Model.Price" />
+    </div>
+     <div>
+        <label class="mb-3 form-label col-1 text-dark">Стойност словом:</label>
+        <input class="col-4 mb-4" asp-for="@Model.PriceByWords" />
+    </div>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">Тип фактура:</label>
+        <input class="col-4 mb-3" asp-for="@Model.InvoiceType" />
+    </div>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">Номер на фактура:</label>
+        <input class="col-4 mb-3" asp-for="@Model.InvoiceNumber" value="@Model.InvoiceNumber.ToString("D10")" />
+    </div>
+    <button class="mb-3 btn btn-primary" type="submit">Продължи?</button>
+</form>
+<a asp-action="Report" class="btn btn-danger">Отказ</a>

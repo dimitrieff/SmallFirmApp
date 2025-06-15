@@ -1,0 +1,9 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model Staff
+
+<h4>Нов запис за персонал:</h4>
+<form asp-action="CreateStaff">
+    <input class="col-4 mb-3" asp-for="Name" />
+    <button class="btn btn-primary" type="submit">Въведи</button>
+</form>
+<Button onclick="window.history.back();" class="btn btn-danger">Отказ</Button>

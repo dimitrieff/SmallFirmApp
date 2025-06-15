@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+@using SmallFirmApp.Constants
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmallFirmApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SmallFirmApp.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            
+            background-color: gainsboro;
+            background-image: url("/Images/10.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+        }
+
+        .dropdown-item:hover {
+            background-color: cornflowerblue;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand text-light" asp-area="" asp-controller="SmallFirmApp" asp-action="Index">SmallFirmApp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon navbar-dark"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="SmallFirmApp" asp-action="Index">Въвеждане</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="SmallFirmApp" asp-action="Report">Отчет</a>
+                            </li>
+
+                            @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.StaffOperator))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-light" href="#" id="menu2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Справки
+                                    </a>
+                                    <ul class="dropdown-menu bg-primary" aria-labelledby="menu2">
+                                        <li><a class="dropdown-item text-light" asp-controller="CrossRef" asp-action="DateInvoice">Фактури клиент</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="CrossRef" asp-action="AllInvoice">Фактури период</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="CrossRef" asp-action="VisiteForTime">Посещения период</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="CrossRef" asp-action="DateDeliveries">Доставки период</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="CrossRef" asp-action="StaffVisite">Справка служители</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="CrossRef" asp-action="ForDeliverList">За доставка</a></li>
+                                    </ul>
+                                </li>
+                               @*  <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="CrossRef" asp-action="CrossRefStart">Справки</a>
+                                </li> *@
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-light" href="#" id="menu3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Настройки
+                                    </a>
+                                    <ul class="dropdown-menu bg-primary" aria-labelledby="menu3">
+                                        <li><a class="dropdown-item text-light" asp-controller="Admin" asp-action="SetAddon">Допълнителни</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="Admin" asp-action="SetConsumatives">Консумативи</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="Admin" asp-action="SetServices">Услуги</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="Admin" asp-action="SetClient">Клиенти</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="Admin" asp-action="SetStaff">Служители</a></li>
+                                        
+                                    </ul>
+                                </li>
+                               @*  <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Admin" asp-action="Index">Настройки</a>
+                                </li> *@
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Регистриране</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Logout">Изход</a>
+                            </li>
+                        }
+                        @*  else
+                        {
+                        <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Вход</a>
+                        </li>
+                        } *@
+                    </ul>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="nav-link text-light text-light text-md-end" asp-area="Identity" asp-page="/Account/Manage/Index">Влезли сте като: <strong>@User.Identity.Name</strong></a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

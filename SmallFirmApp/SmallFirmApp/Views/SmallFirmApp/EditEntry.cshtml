@@ -1,0 +1,63 @@
+﻿@using SmallFirmApp.Models.ProgramModels;
+@model Visite
+
+<h3 class="display-6">Редакция на посещение за клиент:</h3>
+
+<form asp-action="EditEntry" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label"><strong>Клиент: @Model.Client.Name</strong></label>
+        @*  <select asp-for="ClientId" class="form-select" *@
+        @* asp-items="@(new SelectList(ViewBag.Client,"Id","Name")) "></select> *@
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label"><strong>Дата на посещение: @Model.Day.Value.ToShortDateString()</strong></label>
+        <input asp-for="Day" type="date" class="mb-3" value="@Model.Day.Value.ToString("yyyy-MM-dd")" />
+    </div>
+
+   
+
+    <div class="mb-3">
+        <label class="form-label"><strong>Служител:</strong></label>
+        <select  id="input3" onchange="setStaffName()" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Staff,"Id","Name"))"></select>
+        <br>
+        <textarea asp-for="Staff" rows="1" id="input4" class="form-control">@Model.Staff</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label"><strong>Допълнително:</strong></label>
+        <select class="form-select" id="input1" onchange="setAddOnValue()"
+                asp-items="@(new SelectList(ViewBag.AddOn,"Id","Name"))"></select>
+        <br>
+        <textarea asp-for="AddOn" rows="3" id="input2" class="form-control">@Model.AddOn </textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label"><strong>Забележка:</strong></label>
+        <br>
+        <textarea asp-for="Remark" rows="2" class="form-control"> </textarea>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="User" />
+    <input type="hidden" asp-for="ClientId" />
+    <input type="hidden" asp-for="Client" />
+    <input type="hidden" asp-for="Tax" />
+
+    <button type="submit" class="btn btn-dark">Продължи</button>
+    <a asp-action="Index" class="btn btn-outline-dark">Откажи</a>
+</form>
+
+<script language="JavaScript" type="text/javascript">
+    function setAddOnValue() {
+        document.getElementById('input2').value = 
+        document.getElementById('input2').value + $("#input1 option:selected").text() + "; ";
+    }
+    function setStaffName() {
+        document.getElementById('input4').value = 
+        document.getElementById('input4').value + $("#input3 option:selected").text() + "; ";
+    }
+</script>

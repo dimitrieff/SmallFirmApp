@@ -1,0 +1,84 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model IEnumerable<ExtraService>
+
+
+<h4>Редакция всички услуги</h4>
+<div class="col-10">
+    <a class="mb-3 btn btn-primary" asp-action="CreateService">Нов запис</a>
+    @* <a class=" mb-3 btn btn-danger" asp-action="ListAllConsumatives">Покажи всички</a> *@
+    <div>
+
+        @foreach (var entry in Model)
+        {
+            <div id="entry-@entry.Id">
+                <label class="col-1" asp-for="@entry.Id">@entry.Id</label>
+
+                <select id="active-@entry.Id" class="col-2" asp-for="@entry.isActive">
+                    <option value="0" class="text-danger">Неактивен</option>
+                    <option value="1">Активен</option>
+                </select>
+
+                @* <input id="active-@entry.Id" class="col-1" asp-for="@entry.isActive" /> *@
+
+                <label class="col-2" asp-for="@entry.date">@entry.date.ToShortDateString()</label>
+                <input id="id-@entry.Id" class="col-4" asp-for="@entry.Name" />
+                <input type="hidden" asp-for="@entry.Id" />
+                <input id="price-@entry.Id" class="col-1" asp-for="@entry.ExtraPrice" />
+                <button class="btn btn-dark btn-sm" onclick="editEntry(@entry.Id)">Промени</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteEntry(@entry.Id)">Изтрий</button>
+
+            </div>
+            <br>
+
+        }
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteEntry(id) {
+            if (confirm("Записът ще бъде изтрит!")) {
+                $.ajax({
+                    url: "@Url.Action("DbDeleteService", "Admin")/" + id,
+                    type: "delete",
+                    success: function (result) {
+                        $("#entry-" + id).remove();
+
+                    },
+                    error: function (err) {
+                        alert("Записът е свързан с друга база")
+                    }
+                });
+            }
+        }
+
+        function editEntry(id) {
+            if (confirm("Промяната ще се отрази в свързаните записи!")) {
+                // Declare variables properly
+                // let id = document.getElementById('id-' + entry.Id).value;
+                let nam = document.getElementById("id-" + id).value;
+                let price = document.getElementById("price-" + id).value;
+                let isAct = document.getElementById("active-" + id).value;
+                // Make sure to construct the URL properly
+                let url = "@Url.Action("DbEditService", "Admin")"; // Razor will generate the base URL
+                url += `?id=${encodeURIComponent(id)}&name=${encodeURIComponent(nam)}&price=${encodeURIComponent(price)}&isActive=${encodeURIComponent(isAct)}`;
+
+                // Perform the AJAX request
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    success: function (response) {
+                        // Handle success
+                        location.reload();
+                        console.log("Edit successful:", response);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.error("Edit failed:", status, error);
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,74 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model Visite
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 offset-md-0">
+            <div class="card" style="background-color: lightgrey; color: black;">
+                <div class="card-header bg-primary text-white">
+                    <h2>Посещение на клиент:</h2>
+                </div>
+                <div class="card-body">
+
+                    @* <h3 class="display-6">Посещение на клиент:</h3> *@
+
+                    <form asp-action="Index" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Дата на посещение:</strong></label>
+                            <input asp-for="Day" type="date" class="mb-3" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Клиент:</strong></label>
+                            <select asp-for="ClientId" class="form-select"
+                                    asp-items="@(new SelectList(ViewBag.Client,"Id","Name"))"></select>
+                            <span asp-validation-for="ClientId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Служител:</strong></label>
+                            <select id="input3" onchange="setStaffName()" class="form-select"
+                                    asp-items="@(new SelectList(ViewBag.Staff,"Id","Name"))"></select>
+                            <br>
+                            <textarea asp-for="Staff" rows="1" id="input4" class="form-control"> </textarea>
+                            <span asp-validation-for="Staff" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Допълнително:</strong></label>
+                            <select class="form-select" id="input1" onchange="setAddOnValue()"
+                                    asp-items="@(new SelectList(ViewBag.AddOn,"Id","Name"))"></select>
+                            <br>
+                            <textarea asp-for="AddOn" rows="2" id="input2" class="form-control"> </textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Забележка:</strong></label>
+                            <br>
+                            <textarea asp-for="Remark" rows="1" class="form-control"> </textarea>
+                        </div>
+
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-dark">Продължи</button>
+                            <a asp-action="Index" class="btn btn-outline-dark">Откажи</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="JavaScript" type="text/javascript">
+    function setAddOnValue() {
+        document.getElementById('input2').value =
+            document.getElementById('input2').value + $("#input1 option:selected").text() + "; ";
+    }
+    function setStaffName() {
+        document.getElementById('input4').value =
+            document.getElementById('input4').value + $("#input3 option:selected").text() + "; ";
+    }
+</script>
+

@@ -1,0 +1,95 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model Client
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 offset-md-0">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Редакция на клиент:</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="DbEditClient" method="post">
+                        <div class=" form-group mb-3">
+                            <div class=" form-check">
+                                <input class="form-check-input" checked asp-for="isActive" type="radio" value="1" />
+                                <label class="form-check-label">Активен</label>
+                            </div>
+                            <div class=" form-check">
+                                <input class="form-check-input" asp-for="isActive" type="radio" value="0" />
+                                <label class="form-check-label">Неактивен</label>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Name" class="col-1">Име:</label>
+                            <input asp-for="Name" class="col-10" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="City" class="col-1">Град/село:</label>
+                            <input asp-for="City" class="col-2" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Address" class="col-1">Адрес:</label>
+                            <input asp-for="Address" class="col-10" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class=" form-group mb-3">
+                            <div class=" form-check">
+                                <input class="form-check-input" checked asp-for="Dds" type="radio" value="true" />
+                                <label class="form-check-label">ДДС</label>
+                            </div>
+                            <div class=" form-check">
+                                <input class="form-check-input" asp-for="Dds" type="radio" value="false" />
+                                <label class="form-check-label">Без ДДС</label>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Ein" class="col-1">Булстат/ЕИН:</label>
+                            <input asp-for="Ein" class="col-2" />
+                            <span asp-validation-for="Ein" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Recipient" class="col-1">Получател:</label>
+                            <input asp-for="Recipient" class="col-10" />
+                            <span asp-validation-for="Recipient" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Mol" class="col-1">Мол:</label>
+                            <input asp-for="Mol" class="col-10" />
+                            <span asp-validation-for="Mol" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="col-1">Поща:</label>
+                            <input asp-for="Email" class="col-3" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class=" form-group mb-3">
+                            <div class=" form-check">
+                                <input class="form-check-input" checked asp-for="OnMonth" type="radio" value="true" />
+                                <label class="form-check-label">Абонамент</label>
+                            </div>
+                            <div class=" form-check">
+                                <input class="form-check-input" asp-for="OnMonth" type="radio" value="false" />
+                                <label class="form-check-label">Посещение</label>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Tax" class="col-1">Цена:</label>
+                            <input asp-for="Tax" class="col-1" />
+                            <span asp-validation-for="Tax" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Промени</button>
+                            <button onclick="window.history.back();" class="btn btn-danger">Отказ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

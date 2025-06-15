@@ -1,0 +1,40 @@
+﻿@using SmallFirmApp.Models.ViewModels
+@model InvoiceVM
+
+<h4>Издадена фактура:</h4>
+<form>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">Клиент:</label>
+        <input class="col-4 mb-3" asp-for="@Model.Client.Name" />
+    </div>
+    <div>
+        <label class="mb-3 col-1 text-dark">Дата:</label>
+        <label class="mb-3 text-dark" asp-for="@Model.InvoiceDate">@Model.InvoiceDate.ToShortDateString()</label>
+        
+        @* <span asp-validation-for="ExtraPrice" class="text-danger"></span> *@
+    </div>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">ЕИК:</label>
+        <input class="col-4 mb-3" asp-for="@Model.Client.Ein" value="@Model.Client.Ein" />
+    </div>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">Стойност:</label>
+        <input class="col-4 mb-3" asp-for="@Model.Price" />
+    </div>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">Стойност словом:</label>
+        <input class="col-4 mb-4" asp-for="@Model.PriceByWords" />
+    </div>
+     <div>
+        <label class="mb-3 form-label col-1 text-dark">Тип фактура:</label>
+        <input class="col-4 mb-3" asp-for="@Model.InvoiceType" />
+    </div>
+    <div>
+        <label class="mb-3 form-label col-1 text-dark">Номер на фактура:</label>
+        <input class="col-4 mb-3" asp-for="@Model.InvoiceNumber" value="@Model.InvoiceNumber.ToString("D10")" />
+    </div>
+    <div>
+    <a class="mb-3  btn btn-dark" asp-route-aDate="@Model.InvoiceDate.ToString("yyyy-MM-dd")" asp-route-inNumber="@Model.InvoiceNumber" asp-route-inPrice="@Model.Price" asp-action="ExcelDDSInvoice">Експорт към Ексел</a>
+    <a asp-action="Report" class=" mb-3 btn btn-danger">Назад към отчет</a>
+    </div>
+</form>

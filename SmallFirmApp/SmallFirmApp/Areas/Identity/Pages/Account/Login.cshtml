@@ -1,0 +1,44 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<h1 class="row d-flex justify-content-center col-12">@ViewData["Title"]</h1>
+<br />
+<div class="row d-flex justify-content-center col-12">
+    <div class="col-md-4 ">
+        <section class="row d-flex justify-content-center col-12">
+            <form id="account" method="post">
+                <hr />
+                <br />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="поща" />
+                    <label asp-for="Input.Email" class="form-label">Поща</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="парола" />
+                    <label asp-for="Input.Password" class="form-label">Парола</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="checkbox mb-3">
+                    <label asp-for="Input.RememberMe" class="form-label">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        Запомни ме
+                        @* @Html.DisplayNameFor(m => m.Input.RememberMe) *@
+                    </label>
+                </div>
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Вход</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

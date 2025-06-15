@@ -1,0 +1,78 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model IEnumerable<AddOn>
+
+
+<h4>Настройки на допълнителни</h4>
+<div class="col-12">
+   <a class="mb-3 btn btn-primary" asp-action="CreateAddon">Нов запис</a> 
+    <div >
+        
+        @foreach (var entry in Model)
+        {
+            <div id="entry-@entry.Id">
+                
+                @* <label asp-for="@entry.Id">@entry.Id</label> *@
+                <input id="id-@entry.Id" class="col-6" asp-for="@entry.Name" />
+                <input type="hidden" asp-for="@entry.Id" />
+                <button class="btn btn-dark btn-sm" onclick="editEntry(@entry.Id)">Промени</button>
+                @* <a class="btn btn-dark btn-sm" asp-route-id="@entry.Id" asp-route-name ="@entry.Name" asp-action="EditAddon">Промени</a> *@
+                <button class="btn btn-danger btn-sm" onclick="deleteEntry(@entry.Id)">Изтрий</button>
+               
+            </div>
+            <br>
+
+        }
+        
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteEntry(id) {
+            if (confirm("Записът ще бъде изтрит")) {
+                $.ajax({
+                    url: "@Url.Action("DeleteAddon", "Admin")/" + id,
+                    type: "delete",
+                    success: function (result) {
+                        $("#entry-" + id).remove();
+
+                    },
+                    error: function (err) {
+                        alert("error")
+                    }
+                });
+            }
+        }
+        // function editEntry() {
+        //     id = document.getElementById('idValue').value;
+        //     nam = document.getElementById('nameValue').value;
+        //     $.ajax({
+        //         url: "@Url.Action("EditAddon", "Admin")/" + id + nam,
+        //         type: "post"
+        //     });
+        // }
+        function editEntry(id) {
+            // Declare variables properly
+            // let id = document.getElementById('id-' + entry.Id).value;
+            let nam = document.getElementById("id-" + id).value;
+
+            // Make sure to construct the URL properly
+            let url = "@Url.Action("EditAddon", "Admin")"; // Razor will generate the base URL
+            url += `?id=${encodeURIComponent(id)}&name=${encodeURIComponent(nam)}`;
+
+            // Perform the AJAX request
+            $.ajax({
+                url: url,
+                type: "post",
+                success: function (response) {
+                    // Handle success
+                    console.log("Edit successful:", response);
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error("Edit failed:", status, error);
+                }
+            });
+        }
+    </script>
+}

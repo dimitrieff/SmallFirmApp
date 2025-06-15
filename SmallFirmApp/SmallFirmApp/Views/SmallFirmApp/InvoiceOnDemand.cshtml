@@ -1,0 +1,18 @@
+﻿@using SmallFirmApp.Models.ViewModels
+@model InvoiceOnDemandVM
+
+<h4>Фактура за клиент</h4>
+
+<form class="mb-3" method="post">
+    <div class="mb-3">
+
+        <select asp-for="ChosenId" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Client,"Id","Name")) "> </select>
+    </div>
+    <div>
+        <label class="mb-3 form-label col-1">Стойност:</label>
+        <input class="col-4 mb-3" asp-for="@Model.Price" />
+    </div>
+    <button type="submit" class="btn btn-primary">Фактура</button>
+
+</form>

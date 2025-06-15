@@ -1,0 +1,28 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model ForDelivery
+
+
+<h1 class="display-4">За доставка:</h1>
+
+<form asp-action="ForDeliver" method="post">
+    
+    <div class="mb-3">
+        <label class="form-label"><strong>Консуматив:</strong></label>
+        <select id="input1" onchange="setConName()" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Consumatives,"Id","Name"))"></select>
+        <br>
+        <textarea asp-for="ForDeliver" rows="2" id="input2" class="form-control"> </textarea>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-dark">Продължи</button>
+    <a asp-action="Index" class="btn btn-outline-dark">Откажи</a>
+</form>
+
+<script language="JavaScript" type="text/javascript">
+    function setConName() {
+        document.getElementById('input2').value =
+            document.getElementById('input2').value + $("#input1 option:selected").text() + "; ";
+    }
+</script>

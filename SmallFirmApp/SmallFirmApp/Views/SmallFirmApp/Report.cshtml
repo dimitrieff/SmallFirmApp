@@ -1,0 +1,185 @@
+﻿@using SmallFirmApp.Models.ViewModels
+@model ReportVM
+@using Microsoft.AspNetCore.Identity
+@using SmallFirmApp.Constants
+
+@{
+    //DateTime? check = new DateTime(2024, 1, 1);
+    double? sum = 0;
+    double? monthTax = 0;
+    string price = "";
+}
+<style>
+    td {
+        white-space: pre; /* Preserve whitespace and line breaks */
+    }
+</style>
+<style>
+    table {
+        border-collapse: collapse; /* Ensures borders do not double up */
+    }
+
+    td, th {
+        border-right: 1px solid black; /* Adds borders between columns */
+        padding: 5px;
+    }
+
+    tr td:last-child, tr th:last-child {
+        border-right: none; /* Removes the border from the last column */
+    }
+</style>
+
+<h4>Отчет за клиент</h4>
+
+<form class="mb-3" method="post">
+    <div class="mb-3">
+
+        <label class="text-dark"><strong>От дата:</strong></label>
+        <input type="date" class="mb-3" asp-for="StartDate" />
+
+        <label class="text-dark"><strong>До дата:</strong></label>
+        <input class="mb-3" type="date" asp-for="EndDate" />
+
+        <select asp-for="ChosenId" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Client,"Id","Name")) "> </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Отчет</button>
+
+</form>
+@* <a class="mb-3  btn btn-dark" asp-action="ExcelExport">Експорт към Ексел</a> *@
+@if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.StaffOperator))
+{
+    <button class="mb-3  btn btn-dark" onclick="downloadFile()">Експорт към Ексел</button>
+    <button class="mb-3  btn btn-dark" onclick="invoiceEntry()">Фактура</button>
+}
+<div class="table-responsive-xl">
+    <table id="table" class="table table-striped table-hover border-0">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Служител</th>
+                <th>Допълнително</th>
+                <th>Доставки</th>
+                <th>Брой</th>
+                <th>Единична цена</th>
+                <th>Крайна цена</th>
+                <th>Допълнителни yслуги</th>
+                <th>Брой</th>
+                <th>Единична цена</th>
+                <th>Крайна цена</th>
+                <th>Цена посещение</th>
+                <th></th>
+                <th></th>
+                <th>Забележка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ChosenId != 0)
+            {
+                @foreach (var entry in Model.ReportDataList)
+                {
+
+                    <tr title="@entry.Remark" id="entry-@entry.vId">
+
+                        <td>@entry.Day.Value.ToShortDateString()</td>
+                        <td>@entry.Staff</td>
+                        <td style="white-space: normal;">@entry.AddOn</td>
+                        <td>@entry.ConNameList</td>
+                        <td>@entry.ConCountList</td>
+                        <td>@entry.ConPriceList</td>
+                        <td>@entry.ConOveralList</td>
+                        <td>@entry.ExtraNameList</td>
+                        <td>@entry.ExtraCountList</td>
+                        <td>@entry.ExtraPriceList</td>
+                        <td>@entry.ExtraOveralList</td>
+                        <td>@(entry.Tax.Value != 0 ? entry.Tax.Value.ToString("0.00") : string.Empty)</td>
+                        <td><a title="Редактиране" class="btn btn-dark btn-sm" asp-route-id="@entry.vId" asp-action="EditEntry">~</a></td>
+                        <td><button title="Изтриване" class="btn btn-danger btn-sm" onclick="deleteEntry(@entry.vId)">X</button></td>
+                        <td>@entry.Remark</td>
+                        @{
+                            monthTax = entry.MonthTax;
+                            sum = sum + entry.Tax + entry.ConFinal + entry.ExtraFinal;
+                        }
+                    </tr>
+                }
+                @if (monthTax != 0)
+                {
+                    <tr>
+                        <td style="border-right: none;" colspan="10"></td>
+                        <td style="white-space: normal; border-right: none;">Абонамент:</td>
+                        <td style="white-space: normal;" colspan="4">
+                            @monthTax.Value.ToString("0.00")
+                        </td>
+                        @{
+                            sum = sum + monthTax;
+                        }
+                    </tr>
+                }
+                <tr>
+                    <td style="border-right: none;" colspan="10"></td>
+                    <td style="white-space: normal; border-right: none;">Общо:</td>
+                    <td id="trans" style="white-space: normal;" colspan="4">@sum.Value.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <td colspan="1">Текст:</td>
+                    <td colspan="9" class="text-start"><input id="Discount" style="display: block;" type="text" size="93" /></td>
+                    <td colspan="1" style="text-align: left; margin: 0;">Сума:</td>
+                    <td colspan="4" style="text-align: left;"><input id="DiscountValue" style="display: block;" type="text" size="8" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+            function deleteEntry(id) {
+                if (confirm("Are u sure?")) {
+                    $.ajax({
+                        url: "@Url.Action("DeleteEntry", "SmallFirmApp")/" + id,
+                        type: "delete",
+                        success: function (result) {
+                            $("#entry-" + id).remove();
+
+                        },
+                        error: function (err) {
+                            alert("error")
+                        }
+                    });
+                }
+            }
+
+        function downloadFile() {
+            let Discount = document.getElementById("Discount").value;
+            let DiscountValue = document.getElementById("DiscountValue").value;
+
+            window.location.href = `/SmallFirmApp/ExcelExport?Discount=${Discount}&DiscountValue=${DiscountValue}`;
+        }
+
+            function invoiceEntry() {
+
+                const priceNow = document.getElementById("trans").textContent;
+
+                const  DiscountValue = document.getElementById("DiscountValue").value;
+                const price = priceNow - DiscountValue;
+                //Make sure to construct the URL properly
+                // let url = "@Url.Action("Invoice", "SmallFirmApp")"; // Razor will generate the base URL
+                // url += `?price=${encodeURIComponent(price)}`;
+                window.location.href = `Invoice?price=${encodeURIComponent(price)}`;
+                // Perform the AJAX request
+                // $.ajax({
+                //     url: url,
+                //     type: "Get",
+                //     success: function (response) {
+                //         // Handle success
+                //         //location.reload();
+                //         console.log("Edit successful:", response);
+                //     },
+                //     error: function (xhr, status, error) {
+                //         // Handle error
+                //         console.error("Edit failed:", status, error);
+                //     }
+                // });
+            }
+    </script>
+}

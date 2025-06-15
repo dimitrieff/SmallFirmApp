@@ -1,0 +1,36 @@
+﻿@using SmallFirmApp.Models.ViewModels
+@model PServicesVM
+@{
+    int a = Model.ServiceProcessed.Length;
+}
+
+<h1 class="display-4">Допълнителни услуги:</h1>
+
+<form method="post">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Услуга:</th>
+                    <th>Брой:</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < a; i++)
+                {
+                    <tr>
+                        <td>
+                            <label asp-for=ServiceName[i]>@Model.ServiceName[i]</label>
+                            <input type="hidden" asp-for=ServiceID[i] value="@Model.ServiceID[i]" />
+                        </td>
+                        <td>
+                            <input asp-for=ServiceProcessed[i] value="@Model.ServiceProcessed[i]" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <button type="submit" class="btn btn-dark">Продължи</button>
+</form>
+

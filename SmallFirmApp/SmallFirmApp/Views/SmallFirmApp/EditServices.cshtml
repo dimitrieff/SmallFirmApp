@@ -1,0 +1,42 @@
+﻿@using SmallFirmApp.Models.ViewModels
+@model DeliveriesVM
+@{
+    int a = Model.consDelivered.Length;
+}
+
+<h1 class="display-4">Редакция на допълнителни услуги:</h1>
+
+<form asp-action="EditServices" method="post">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Услуга:</th>
+                    <th>Брой</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < a; i++)
+                {
+                    <tr>
+                        <td>
+                            <label asp-for=ConsName[i]>@Model.ConsName[i]</label>
+                            <input type="hidden" asp-for=ConsID[i] value="@Model.ConsID[i]" />
+                        </td>
+                        <td>
+                            <input asp-for=consDelivered[i] value="@Model.consDelivered[i]" />
+                            <input type="hidden" asp-for=EditCons[i] value="@Model.EditCons[i]" />
+                            <input type="hidden" asp-for=EditId value="@Model.EditId" />
+                            <input type="hidden" asp-for=EditClientId value="@Model.EditClientId" />
+                            <input type="hidden" asp-for=EditDay value="@Model.EditDay" />
+                            <input type="hidden" asp-for=isVisited value="@Model.isVisited" />
+                            <input type="hidden" asp-for=isVisitedId value="@Model.isVisitedId" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <button type="submit" class="btn btn-dark">Продължи</button>
+</form>
+

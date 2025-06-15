@@ -1,0 +1,23 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model ExtraService
+
+<h4>Нов запис за услуги:</h4>
+<form asp-action="CreateService">
+    <div>
+        <label class="mb-3 form-label col-1">Услуга:</label>
+        <input class="col-4 mb-3" asp-for="Name" />
+    </div>
+    <div>
+        <label class="mb-3 col-1">Цена:</label>
+        <input class=" col-1 mb-3" asp-for="ExtraPrice" />
+        <span asp-validation-for="ExtraPrice" class="text-danger"></span>
+    </div>
+    <button class="mb-3 btn btn-primary" type="submit">Въведи</button>
+</form>
+<Button onclick="window.history.back();" class="btn btn-danger">Отказ</Button>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

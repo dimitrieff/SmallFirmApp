@@ -1,0 +1,91 @@
+﻿@using SmallFirmApp.Models.ViewModels
+@model DateInvoiceVM
+@{
+    double? sumDDS = 0;
+    double? sumSimple = 0;
+}
+
+
+<h4>Справка издадени фактури за период</h4>
+
+<form class="mb-3" method="post">
+    <div class="mb-3">
+
+        <label><strong>От дата:</strong></label>
+        <input type="date" class="mb-3" asp-for="StartDate" />
+
+        <label><strong>До дата:</strong></label>
+        <input class="mb-3" type="date" asp-for="EndDate" />
+
+        @* <select asp-for="ClientId" class="form-select"
+        asp-items="@(new SelectList(ViewBag.Client,"Id","Name")) "> </select> *@
+    </div>
+    <button type="submit" class="btn btn-primary">Справка</button>
+</form>
+
+<div class="table-responsive">
+    <table id="table" class="table table-striped table-hover border-0">
+        <thead>
+            <tr>
+                <th>Клиент</th>
+                <th>Дата</th>
+                <th>Вид Фактура</th>
+                <th>Номер фактура</th>
+                <th>Стойност без ДДС </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ClientId != 0)
+            {
+                @foreach (var entry in Model.InvDDS)
+                {
+                    <tr id="entry-@entry.Client.Id">
+                        <td>@entry.Client.Name</td>
+                        <td>@entry.DayOfInvoice.ToShortDateString()</td>
+                        <td>ДДС</td>
+                        <td>@entry.InvoiceNumber</td>
+                        <td>@entry.Price.ToString("0.00")</td>
+
+                    </tr>
+                    sumDDS += entry.Price;
+                }
+                <tr>
+                    <td colspan="4" class="text-end fw-bold">Общо без ДДС:</td>
+                    <td class="fw-bold">@sumDDS.Value.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-end fw-bold">ДДС:</td>
+                    <td class="fw-bold">@((sumDDS * 0.2).Value.ToString("0.00"))</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-end fw-bold">Стойност с ДДС:</td>
+                    <td class="fw-bold">@((sumDDS * 1.2).Value.ToString("0.00"))</td>
+                </tr>
+
+               @*  @foreach (var entry in Model.InvSimple)
+                {
+                    <tr id="entry-@entry.Client.Id">
+                        <td>@entry.Client.Name</td>
+                        <td>@entry.DayOfInvoice.ToShortDateString()</td>
+                        <td>без ДДС</td>
+                        <td>@entry.InvoiceNumber</td>
+                        <td>@entry.Price.ToString("0.00")</td>
+                    </tr>
+                    sumSimple += entry.Price;
+                }
+                <tr>
+                    <td colspan="4" class="text-end fw-bold">Общо:</td>
+                    <td class="fw-bold">@sumSimple.Value.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-end fw-bold">Всичко без ДДС::</td>
+                    <td class="fw-bold">@((sumSimple + sumDDS).Value.ToString("0.00"))</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-end fw-bold">Всичко с ДДС::</td>
+                    <td class="fw-bold">@((sumSimple + sumDDS * 1.2).Value.ToString("0.00"))</td>
+                </tr> *@
+            }
+        </tbody>
+    </table>
+</div>

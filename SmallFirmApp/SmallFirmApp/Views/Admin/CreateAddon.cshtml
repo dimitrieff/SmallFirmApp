@@ -1,0 +1,9 @@
+﻿@using SmallFirmApp.Models.ProgramModels
+@model AddOn
+
+<h4>Нов запис за допълнителни:</h4>
+<form asp-action="CreateAddon">
+<input class="col-6 mb-3" asp-for="Name" />
+<button class="btn btn-primary" type="submit">Въведи</button>
+</form>
+<Button onclick="window.history.back();" class="btn btn-danger">Отказ</Button>
